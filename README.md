@@ -71,14 +71,14 @@ https://venturepilot-ai.onrender.com
 
 ## Developer
 
-**Subitsha N**
+Subitsha N
 
 Master of Computer Applications (MCA)
 
-Anna University – UCE BIT Campus, Trichy
+Anna University – University College of Engineerint,BIT Campus,Anna University, Tirichirapalli.
 
 ---
 
-## 📜 License
+## License
 
 This project is developed for educational purposes.
