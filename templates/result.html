@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Startup Blueprint Report — VenturePilot AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="result-page">
+
+  <!-- ── Navigation ── -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="{{ url_for('index') }}" class="nav-logo">
+        <span class="logo-icon">&#9670;</span>
+        VenturePilot <span class="logo-accent">AI</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        {% if current_user %}
+          <li><a href="{{ url_for('auth.dashboard') }}">Dashboard</a></li>
+          <li><a href="{{ url_for('my_reports') }}">My Reports</a></li>
+          <li><a href="{{ url_for('form') }}" class="nav-cta">New Blueprint</a></li>
+          <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
+          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        {% else %}
+          <li><a href="{{ url_for('index') }}#features">Features</a></li>
+          <li><a href="{{ url_for('index') }}#how-it-works">How It Works</a></li>
+          <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+          <li><a href="{{ url_for('auth.register') }}" class="nav-cta">Register</a></li>
+        {% endif %}
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Main wrapper ── -->
+  <main class="rp-wrapper">
+
+    <div class="rp-shapes" aria-hidden="true">
+      <div class="rp-shape rp-shape-1"></div>
+      <div class="rp-shape rp-shape-2"></div>
+    </div>
+
+    <div class="rp-inner">
+
+      <!-- ── Page header ── -->
+      <header class="rp-header">
+        <div class="rp-header-badge">
+          <span class="rp-badge-dot"></span>
+          Powered by IBM Granite AI
+        </div>
+        <h1 class="rp-title">Startup Blueprint Report</h1>
+        <p class="rp-subtitle">Your AI-generated business blueprint powered by IBM Granite.</p>
+
+        <div class="rp-meta">
+          <div class="rp-meta-item">
+            <span class="rp-meta-label">Startup</span>
+            <span class="rp-meta-value">{{ data.startup_name or "—" }}</span>
+          </div>
+          {% if data.founder_name %}
+          <div class="rp-meta-sep"></div>
+          <div class="rp-meta-item">
+            <span class="rp-meta-label">Founder</span>
+            <span class="rp-meta-value">{{ data.founder_name }}</span>
+          </div>
+          {% endif %}
+          <div class="rp-meta-sep"></div>
+          <div class="rp-meta-item">
+            <span class="rp-meta-label">Industry</span>
+            <span class="rp-meta-value">{{ data.industry or "—" }}</span>
+          </div>
+          <div class="rp-meta-sep"></div>
+          <div class="rp-meta-item">
+            <span class="rp-meta-label">Stage</span>
+            <span class="rp-meta-value rp-stage-badge">{{ data.business_stage or "—" }}</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ── Blueprint cards grid ── -->
+      <div class="rp-grid">
+
+        <!-- 01. Executive Summary -->
+        <div class="rp-card rp-card--wide" id="section-summary">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#128196;</span>
+            <div>
+              <div class="rp-card-number">01</div>
+              <h2 class="rp-card-title">Executive Summary</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.business_summary %}
+              <div class="ai-report">{{ data.business_summary | safe }}</div>
+            {% else %}
+              <div class="rp-placeholder">
+                <div class="rp-ph-line w-90"></div>
+                <div class="rp-ph-line w-75"></div>
+                <div class="rp-ph-line w-85"></div>
+                <div class="rp-ph-line w-60"></div>
+                <p class="rp-ph-label">AI-generated executive summary will appear here.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 02. Business Model Canvas -->
+        <div class="rp-card" id="section-bmc">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#128736;</span>
+            <div>
+              <div class="rp-card-number">02</div>
+              <h2 class="rp-card-title">Business Model Canvas</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.business_model_canvas %}
+              <div class="ai-report">{{ data.business_model_canvas | safe }}</div>
+            {% else %}
+              <div class="rp-placeholder">
+                <div class="rp-ph-line w-80"></div>
+                <div class="rp-ph-line w-65"></div>
+                <div class="rp-ph-line w-90"></div>
+                <p class="rp-ph-label">9-block canvas with key partners, activities, value propositions and more.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 03. Competitor Analysis -->
+        <div class="rp-card" id="section-competitors">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#128202;</span>
+            <div>
+              <div class="rp-card-number">03</div>
+              <h2 class="rp-card-title">Competitor Analysis</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.competitor_analysis %}
+              <div class="ai-report">{{ data.competitor_analysis | safe }}</div>
+            {% else %}
+              <div class="rp-placeholder">
+                <div class="rp-ph-line w-70"></div>
+                <div class="rp-ph-line w-90"></div>
+                <div class="rp-ph-line w-55"></div>
+                <p class="rp-ph-label">Top competitors, market gaps, and your competitive advantage.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 04. SWOT Analysis -->
+        <div class="rp-card rp-card--swot" id="section-swot">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#9878;</span>
+            <div>
+              <div class="rp-card-number">04</div>
+              <h2 class="rp-card-title">SWOT Analysis</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.swot_analysis %}
+              <div class="ai-report">{{ data.swot_analysis | safe }}</div>
+            {% else %}
+              <div class="rp-swot-grid">
+                <div class="rp-swot-cell rp-swot-s">
+                  <span class="rp-swot-label">Strengths</span>
+                  <div class="rp-ph-line w-80"></div>
+                  <div class="rp-ph-line w-65"></div>
+                </div>
+                <div class="rp-swot-cell rp-swot-w">
+                  <span class="rp-swot-label">Weaknesses</span>
+                  <div class="rp-ph-line w-70"></div>
+                  <div class="rp-ph-line w-55"></div>
+                </div>
+                <div class="rp-swot-cell rp-swot-o">
+                  <span class="rp-swot-label">Opportunities</span>
+                  <div class="rp-ph-line w-75"></div>
+                  <div class="rp-ph-line w-85"></div>
+                </div>
+                <div class="rp-swot-cell rp-swot-t">
+                  <span class="rp-swot-label">Threats</span>
+                  <div class="rp-ph-line w-60"></div>
+                  <div class="rp-ph-line w-70"></div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 05. Estimated Budget -->
+        <div class="rp-card" id="section-budget">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#128176;</span>
+            <div>
+              <div class="rp-card-number">05</div>
+              <h2 class="rp-card-title">Estimated Budget</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.estimated_budget %}
+              <div class="ai-report">{{ data.estimated_budget | safe }}</div>
+            {% else %}
+              <div class="rp-placeholder">
+                <div class="rp-ph-line w-85"></div>
+                <div class="rp-ph-line w-70"></div>
+                <div class="rp-ph-line w-60"></div>
+                <p class="rp-ph-label">Stage-appropriate cost breakdown across product, ops, and marketing.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 06. Funding & Investor Recommendations -->
+        <div class="rp-card" id="section-funding">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#128188;</span>
+            <div>
+              <div class="rp-card-number">06</div>
+              <h2 class="rp-card-title">Funding &amp; Investor Recommendations</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.funding_recommendations %}
+              <div class="ai-report">{{ data.funding_recommendations | safe }}</div>
+            {% else %}
+              <div class="rp-placeholder">
+                <div class="rp-ph-line w-90"></div>
+                <div class="rp-ph-line w-65"></div>
+                <div class="rp-ph-line w-80"></div>
+                <p class="rp-ph-label">Recommended funding sources, accelerators, and investor profiles.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 07. Revenue Model -->
+        <div class="rp-card" id="section-revenue">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#128200;</span>
+            <div>
+              <div class="rp-card-number">07</div>
+              <h2 class="rp-card-title">Revenue Model</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.revenue_model %}
+              <div class="ai-report">{{ data.revenue_model | safe }}</div>
+            {% else %}
+              <div class="rp-placeholder">
+                <div class="rp-ph-line w-75"></div>
+                <div class="rp-ph-line w-90"></div>
+                <div class="rp-ph-line w-55"></div>
+                <p class="rp-ph-label">Monetisation strategy, pricing tiers, and revenue stream projections.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 08. Go-to-Market Strategy -->
+        <div class="rp-card" id="section-gtm">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#127919;</span>
+            <div>
+              <div class="rp-card-number">08</div>
+              <h2 class="rp-card-title">Go-to-Market Strategy</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.gtm_strategy %}
+              <div class="ai-report">{{ data.gtm_strategy | safe }}</div>
+            {% else %}
+              <div class="rp-placeholder">
+                <div class="rp-ph-line w-85"></div>
+                <div class="rp-ph-line w-70"></div>
+                <div class="rp-ph-line w-80"></div>
+                <p class="rp-ph-label">Phased GTM plan with channels, messaging, and traction milestones.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 09. Six-Month Roadmap -->
+        <div class="rp-card rp-card--wide" id="section-roadmap">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#128197;</span>
+            <div>
+              <div class="rp-card-number">09</div>
+              <h2 class="rp-card-title">Six-Month Startup Roadmap</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.roadmap %}
+              <div class="ai-report">{{ data.roadmap | safe }}</div>
+            {% else %}
+              <div class="rp-roadmap-strip">
+                {% for month, label in [("Month 1","Foundation"), ("Month 2","Build"), ("Month 3","Launch"), ("Month 4","Traction"), ("Month 5","Iterate"), ("Month 6","Scale")] %}
+                <div class="rp-roadmap-item">
+                  <div class="rp-roadmap-dot"></div>
+                  <div class="rp-roadmap-month">{{ month }}</div>
+                  <div class="rp-roadmap-tag">{{ label }}</div>
+                </div>
+                {% if not loop.last %}<div class="rp-roadmap-line"></div>{% endif %}
+                {% endfor %}
+              </div>
+              <p class="rp-ph-label" style="margin-top:1.25rem;">Month-by-month execution plan across product, marketing, and hiring.</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 10. Future Scope -->
+        <div class="rp-card rp-card--wide" id="section-future">
+          <div class="rp-card-head">
+            <span class="rp-icon">&#127756;</span>
+            <div>
+              <div class="rp-card-number">10</div>
+              <h2 class="rp-card-title">Future Scope</h2>
+            </div>
+          </div>
+          <div class="rp-card-body">
+            {% if data.future_scope %}
+              <div class="ai-report">{{ data.future_scope | safe }}</div>
+            {% else %}
+              <div class="rp-placeholder">
+                <div class="rp-ph-line w-80"></div>
+                <div class="rp-ph-line w-65"></div>
+                <div class="rp-ph-line w-75"></div>
+                <p class="rp-ph-label">Product expansions, adjacent markets, and long-term vision.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+      </div><!-- /.rp-grid -->
+
+      <!-- ── Bottom actions ── -->
+      <div class="rp-actions">
+        <button class="btn btn-ghost rp-download-btn" id="downloadBtn">
+          &#8681;&nbsp; Download Report
+        </button>
+        <a href="{{ url_for('form') }}" class="btn btn-primary btn-lg">
+          &#9670;&nbsp; Generate Another Blueprint
+        </a>
+      </div>
+
+      <p class="rp-footer-note">
+        &copy; 2025 VenturePilot AI &mdash; Built with IBM Granite &middot;
+        Results are AI-generated and should be validated with domain experts.
+      </p>
+
+    </div><!-- /.rp-inner -->
+  </main>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — VenturePilot AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="result-page">
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="{{ url_for('index') }}" class="nav-logo">
+        <span class="logo-icon">&#9670;</span>
+        VenturePilot <span class="logo-accent">AI</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="{{ url_for('auth.dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('my_reports') }}">My Reports</a></li>
+        <li><a href="{{ url_for('form') }}" class="nav-cta">Generate Blueprint</a></li>
+        <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
+        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="rp-wrapper">
+    <div class="rp-shapes" aria-hidden="true">
+      <div class="rp-shape rp-shape-1"></div>
+      <div class="rp-shape rp-shape-2"></div>
+    </div>
+
+    <div class="rp-inner" style="max-width:680px;">
+
+      <header class="rp-header">
+        <div class="rp-header-badge">
+          <span class="rp-badge-dot"></span>
+          Account Settings
+        </div>
+        <h1 class="rp-title">My Profile</h1>
+        <p class="rp-subtitle">Manage your account details and security settings.</p>
+      </header>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="auth-alert auth-alert--{{ category }}" style="margin-bottom:1.5rem;">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+
+      <!-- Profile picture + info card -->
+      <div class="rp-card rp-card--wide" style="margin-bottom:1.25rem;">
+        <div class="rp-card-head">
+          <span class="rp-icon">&#128100;</span>
+          <div>
+            <div class="rp-card-number">ACCOUNT</div>
+            <h2 class="rp-card-title">Account Details</h2>
+          </div>
+        </div>
+        <div class="rp-card-body">
+          <!-- Profile picture placeholder -->
+          <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);">
+            <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#3b6cf6,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:1.75rem;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:-1px;">
+              {{ user['full_name'][0].upper() }}
+            </div>
+            <div>
+              <div style="font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:.2rem;">{{ user['full_name'] }}</div>
+              <div style="font-size:.88rem;color:var(--muted);">{{ user['email'] }}</div>
+            </div>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Email</span>
+            <span class="profile-info-value">{{ user['email'] }}</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Total Reports Generated</span>
+            <span class="profile-info-value">{{ report_count }}</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Account Created</span>
+            <span class="profile-info-value">{{ user['created_at'][:10] }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Update name -->
+      <div class="rp-card rp-card--wide" style="margin-bottom:1.25rem;">
+        <div class="rp-card-head">
+          <span class="rp-icon">&#9998;</span>
+          <div>
+            <div class="rp-card-number">NAME</div>
+            <h2 class="rp-card-title">Update Display Name</h2>
+          </div>
+        </div>
+        <div class="rp-card-body">
+          <form method="POST" action="{{ url_for('auth.profile') }}" novalidate>
+            <input type="hidden" name="action" value="update_name" />
+            <div class="fp-group {% if errors.full_name %}has-error{% endif %}">
+              <label for="full_name" class="fp-label">Full Name</label>
+              <input
+                type="text" id="full_name" name="full_name"
+                class="fp-input"
+                value="{{ user['full_name'] }}"
+                autocomplete="name" required
+              />
+              {% if errors.full_name %}
+                <span class="fp-error">{{ errors.full_name }}</span>
+              {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Save Name</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Change password -->
+      <div class="rp-card rp-card--wide" style="margin-bottom:2rem;">
+        <div class="rp-card-head">
+          <span class="rp-icon">&#128274;</span>
+          <div>
+            <div class="rp-card-number">SECURITY</div>
+            <h2 class="rp-card-title">Change Password</h2>
+          </div>
+        </div>
+        <div class="rp-card-body">
+          <form method="POST" action="{{ url_for('auth.profile') }}" novalidate>
+            <input type="hidden" name="action" value="update_password" />
+
+            <div class="fp-group {% if errors.current_password %}has-error{% endif %}">
+              <label for="current_password" class="fp-label">Current Password</label>
+              <input
+                type="password" id="current_password" name="current_password"
+                class="fp-input" placeholder="••••••••"
+                autocomplete="current-password" required
+              />
+              {% if errors.current_password %}
+                <span class="fp-error">{{ errors.current_password }}</span>
+              {% endif %}
+            </div>
+
+            <div class="fp-row">
+              <div class="fp-group {% if errors.new_password %}has-error{% endif %}">
+                <label for="new_password" class="fp-label">New Password</label>
+                <input
+                  type="password" id="new_password" name="new_password"
+                  class="fp-input" placeholder="Min. 8 characters"
+                  autocomplete="new-password" required
+                />
+                {% if errors.new_password %}
+                  <span class="fp-error">{{ errors.new_password }}</span>
+                {% endif %}
+              </div>
+              <div class="fp-group {% if errors.confirm_password %}has-error{% endif %}">
+                <label for="confirm_password" class="fp-label">Confirm New Password</label>
+                <input
+                  type="password" id="confirm_password" name="confirm_password"
+                  class="fp-input" placeholder="Repeat password"
+                  autocomplete="new-password" required
+                />
+                {% if errors.confirm_password %}
+                  <span class="fp-error">{{ errors.confirm_password }}</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Password</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="rp-actions">
+        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-ghost">&larr; Back to Dashboard</a>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-ghost" style="border-color:rgba(248,113,113,.35);color:#fca5a5;">
+          Logout
+        </a>
+      </div>
+
+      <p class="rp-footer-note">
+        &copy; 2025 VenturePilot AI &mdash; Built with IBM Granite
+      </p>
+
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

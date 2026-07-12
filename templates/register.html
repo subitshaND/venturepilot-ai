@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — VenturePilot AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="auth-page">
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="{{ url_for('index') }}" class="nav-logo">
+        <span class="logo-icon">&#9670;</span>
+        VenturePilot <span class="logo-accent">AI</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        <li><a href="{{ url_for('auth.register') }}" class="nav-cta">Register</a></li>
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="auth-wrapper">
+    <div class="auth-shapes" aria-hidden="true">
+      <div class="auth-shape auth-shape-1"></div>
+      <div class="auth-shape auth-shape-2"></div>
+    </div>
+
+    <div class="auth-card">
+      <header class="auth-header">
+        <div class="auth-badge">
+          <span class="auth-badge-dot"></span>
+          IBM Granite AI
+        </div>
+        <h1 class="auth-title">Create Account</h1>
+        <p class="auth-subtitle">Join VenturePilot AI and start building your blueprint.</p>
+      </header>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="auth-alert auth-alert--{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST" action="{{ url_for('auth.register') }}" novalidate>
+
+        <div class="fp-group {% if errors.full_name %}has-error{% endif %}">
+          <label for="full_name" class="fp-label">
+            Full Name <span class="fp-req">*</span>
+          </label>
+          <input
+            type="text" id="full_name" name="full_name"
+            class="fp-input" placeholder="Jane Doe"
+            value="{{ form_data.get('full_name', '') }}"
+            autocomplete="name" required
+          />
+          {% if errors.full_name %}
+            <span class="fp-error">{{ errors.full_name }}</span>
+          {% endif %}
+        </div>
+
+        <div class="fp-group {% if errors.email %}has-error{% endif %}">
+          <label for="email" class="fp-label">
+            Email Address <span class="fp-req">*</span>
+          </label>
+          <input
+            type="email" id="email" name="email"
+            class="fp-input" placeholder="you@example.com"
+            value="{{ form_data.get('email', '') }}"
+            autocomplete="email" required
+          />
+          {% if errors.email %}
+            <span class="fp-error">{{ errors.email }}</span>
+          {% endif %}
+        </div>
+
+        <div class="fp-row">
+          <div class="fp-group {% if errors.password %}has-error{% endif %}">
+            <label for="password" class="fp-label">
+              Password <span class="fp-req">*</span>
+            </label>
+            <input
+              type="password" id="password" name="password"
+              class="fp-input" placeholder="Min. 8 characters"
+              autocomplete="new-password" required
+            />
+            {% if errors.password %}
+              <span class="fp-error">{{ errors.password }}</span>
+            {% endif %}
+          </div>
+
+          <div class="fp-group {% if errors.confirm_password %}has-error{% endif %}">
+            <label for="confirm_password" class="fp-label">
+              Confirm Password <span class="fp-req">*</span>
+            </label>
+            <input
+              type="password" id="confirm_password" name="confirm_password"
+              class="fp-input" placeholder="Repeat password"
+              autocomplete="new-password" required
+            />
+            {% if errors.confirm_password %}
+              <span class="fp-error">{{ errors.confirm_password }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="fp-divider"></div>
+
+        <button type="submit" class="btn btn-primary btn-lg auth-submit">
+          Create Account &rarr;
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        Already have an account?
+        <a href="{{ url_for('auth.login') }}" class="auth-link">Log in here</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

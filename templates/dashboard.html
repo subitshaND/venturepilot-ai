@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — VenturePilot AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="result-page">
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="{{ url_for('index') }}" class="nav-logo">
+        <span class="logo-icon">&#9670;</span>
+        VenturePilot <span class="logo-accent">AI</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="{{ url_for('auth.dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('my_reports') }}">My Reports</a></li>
+        <li><a href="{{ url_for('form') }}" class="nav-cta">Generate Blueprint</a></li>
+        <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
+        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="rp-wrapper">
+    <div class="rp-shapes" aria-hidden="true">
+      <div class="rp-shape rp-shape-1"></div>
+      <div class="rp-shape rp-shape-2"></div>
+    </div>
+
+    <div class="rp-inner">
+
+      <header class="rp-header">
+        <div class="rp-header-badge">
+          <span class="rp-badge-dot"></span>
+          VenturePilot AI
+        </div>
+        <h1 class="rp-title">Welcome, {{ user['full_name'].split()[0] }}!</h1>
+        <p class="rp-subtitle">Your AI-powered startup workspace. Generate, review, and manage blueprints.</p>
+
+        <div class="rp-meta">
+          <div class="rp-meta-item">
+            <span class="rp-meta-label">Account</span>
+            <span class="rp-meta-value">{{ user['email'] }}</span>
+          </div>
+          <div class="rp-meta-sep"></div>
+          <div class="rp-meta-item">
+            <span class="rp-meta-label">Member Since</span>
+            <span class="rp-meta-value">{{ user['created_at'][:10] }}</span>
+          </div>
+        </div>
+      </header>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="auth-alert auth-alert--{{ category }}" style="margin-bottom:1.5rem;">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+
+      <!-- Quick actions -->
+      <div class="dash-actions">
+
+        <a href="{{ url_for('form') }}" class="dash-card">
+          <div class="dash-card-icon">&#9670;</div>
+          <div class="dash-card-text">
+            <h3>Generate Blueprint</h3>
+            <p>Turn your startup idea into a full AI-powered business plan in minutes.</p>
+          </div>
+          <span class="dash-card-arrow">&rarr;</span>
+        </a>
+
+        <a href="{{ url_for('my_reports') }}" class="dash-card">
+          <div class="dash-card-icon">&#128199;</div>
+          <div class="dash-card-text">
+            <h3>My Reports</h3>
+            <p>View and manage all your previously generated startup blueprints.</p>
+          </div>
+          <span class="dash-card-arrow">&rarr;</span>
+        </a>
+
+        <a href="{{ url_for('auth.profile') }}" class="dash-card">
+          <div class="dash-card-icon">&#128100;</div>
+          <div class="dash-card-text">
+            <h3>My Profile</h3>
+            <p>Update your name, email, and password settings.</p>
+          </div>
+          <span class="dash-card-arrow">&rarr;</span>
+        </a>
+
+        <a href="{{ url_for('index') }}#features" class="dash-card">
+          <div class="dash-card-icon">&#128196;</div>
+          <div class="dash-card-text">
+            <h3>Explore Features</h3>
+            <p>See all 10 AI-generated deliverables included in every blueprint.</p>
+          </div>
+          <span class="dash-card-arrow">&rarr;</span>
+        </a>
+
+      </div><!-- /.dash-actions -->
+
+      <!-- Info strip -->
+      <div class="dash-info">
+        <div class="dash-info-item">
+          <span class="dash-info-icon">&#128200;</span>
+          <div>
+            <div class="dash-info-label">Business Model Canvas</div>
+            <div class="dash-info-val">9-block AI analysis</div>
+          </div>
+        </div>
+        <div class="dash-info-item">
+          <span class="dash-info-icon">&#128202;</span>
+          <div>
+            <div class="dash-info-label">Competitor Analysis</div>
+            <div class="dash-info-val">Direct &amp; indirect mapping</div>
+          </div>
+        </div>
+        <div class="dash-info-item">
+          <span class="dash-info-icon">&#128176;</span>
+          <div>
+            <div class="dash-info-label">Estimated Budget</div>
+            <div class="dash-info-val">12-month cost breakdown</div>
+          </div>
+        </div>
+        <div class="dash-info-item">
+          <span class="dash-info-icon">&#128197;</span>
+          <div>
+            <div class="dash-info-label">6-Month Roadmap</div>
+            <div class="dash-info-val">Milestone execution plan</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="rp-footer-note">
+        &copy; 2025 VenturePilot AI &mdash; Built with IBM Granite &middot;
+        Results are AI-generated and should be validated with domain experts.
+      </p>
+
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
